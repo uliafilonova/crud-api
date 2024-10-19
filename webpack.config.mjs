@@ -1,11 +1,11 @@
-const path = require("path");
 
+import path from "path";
 const config = {
   entry: "./src/app.ts",
   target: 'node',
   output: {
-    filename: 'app.js',
-    path: path.resolve(__dirname, "build"),
+    filename: 'app.cjs',
+    path: path.resolve("./build")
   },
   module: {
     rules: [
@@ -20,6 +20,6 @@ const config = {
     extensions: [".ts"],
   },
 };
-module.exports = () => {
-  return config;
-};
+export default config;
+
+
