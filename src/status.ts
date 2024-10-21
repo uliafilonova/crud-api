@@ -12,7 +12,7 @@ export const StatusError = {
     SERVER_ERROR: 'An error occurred on the server side',
     ENDPOINT_ERROR: 'Non-existing endpoints',
     METHOD_ERROR: 'Method is invalid',
-    USER_ID_ERROR: 'User does not exists with this id',
+    USER_NOT_FOUND_ERROR: 'User does not exists with this id',
     UUID_ERROR: 'Provided ID is not a valid uuid value',
     BODY_ERROR: 'Invalid Body',
     REQUARED_FIELDS_ERROR: 'Body does not contain required fields',
