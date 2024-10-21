@@ -7,6 +7,7 @@ import { getUsers } from "./api/getUsers";
 import { getUser } from "./api/getUser";
 import { postUser } from "./api/postUser";
 import { deleteUser } from "./api/deleteUser";
+import { putUser } from "./api/putUser";
 
 const BASE_ENDPOINT = '/api/users';
 
@@ -51,7 +52,6 @@ export const router = async (req: IncomingMessage, res: ServerResponse<IncomingM
                 break;
 
             case 'DELETE':
-                console.log(parseUserId)
                 if (parseUserId && req.url!.startsWith(`${BASE_ENDPOINT}\/`)) {
                     sendResponse(res, StatusCode.NOT_FOUND_404, null, StatusError.ENDPOINT_ERROR);
                 } else {
@@ -59,6 +59,13 @@ export const router = async (req: IncomingMessage, res: ServerResponse<IncomingM
                 }
                 break;
 
+            case 'PUT':
+                if (parseUserId && req.url!.startsWith(`${BASE_ENDPOINT}\/`)) {
+                    sendResponse(res, StatusCode.NOT_FOUND_404, null, StatusError.ENDPOINT_ERROR);
+                } else {
+                    await putUser(req, res, parseUserId);
+                }
+                break;
 
         }
     } catch {
