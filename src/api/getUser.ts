@@ -1,13 +1,9 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { StatusCode, StatusError } from '../status';
 import { db } from '../db'
-import { sendResponse } from '../functions';
-import { validate as uuidValidate, version as uuidVersion } from 'uuid';
+import { sendResponse, uuidValidateV7 } from '../functions';
 import { IUserDb } from '../models';
 
-const uuidValidateV7 = (uuid: string) => {
-    return uuidValidate(uuid) && uuidVersion(uuid) === 7;
-}
 
 const isExistUser = (id: string): IUserDb | null => {
     const user = db.find((user) => user.id === id);

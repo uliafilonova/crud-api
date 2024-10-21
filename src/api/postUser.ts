@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { StatusCode, StatusError } from "../status";
-import { sendResponse } from "../functions";
+import { sendResponse, uuidValidateV7 } from "../functions";
 import { db } from "../db";
 import { IUserDb } from "../models";
 import { v7 as uuidv7 } from 'uuid';
@@ -29,12 +29,30 @@ const has = <K extends string>(key: K, x: object): x is { [key in K]: unknown } 
     key in x
 );
 
+const hasExpectedProp = (obj: IUserDb, expectedKeys: Array<string>) => {
+    for (let key in obj) {
+        if (!expectedKeys.includes(key)) {
+            return false
+        }
+    }
+    return true
+}
+
+
 export const validUserBody = async (res: ServerResponse, userBody: IUserDb) => {
     try {
-   
-        if (!has('age', userBody) || !has('username', userBody) || !has('hobbies', userBody) || Object.keys(userBody).length > 3) {
+        if (!has('age', userBody) ||
+            !has('username', userBody) ||
+            !has('hobbies', userBody) ||
+            //JSON.stringify(Object.keys(userBody).sort()) !== JSON.stringify(['id', 'age', 'username', 'hobbies'].sort())
+            !hasExpectedProp(userBody, ['id', 'age', 'username', 'hobbies'])
+        ) {
             sendResponse(res, StatusCode.BAD_REQUEST, null, StatusError.REQUARED_FIELDS_ERROR,
             );
+            return false;
+        }
+        if((userBody.id && !uuidValidateV7(userBody.id))){
+            sendResponse(res, StatusCode.BAD_REQUEST, null, StatusError.UUID_ERROR);
             return false;
         }
         if (

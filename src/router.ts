@@ -6,6 +6,7 @@ import { StatusCode, StatusError } from "./status";
 import { getUsers } from "./api/getUsers";
 import { getUser } from "./api/getUser";
 import { postUser } from "./api/postUser";
+import { deleteUser } from "./api/deleteUser";
 
 const BASE_ENDPOINT = '/api/users';
 
@@ -43,11 +44,21 @@ export const router = async (req: IncomingMessage, res: ServerResponse<IncomingM
 
             case 'POST':
                 if (parseUserId || (req.url !== BASE_ENDPOINT && req.url !== `${BASE_ENDPOINT}\/`)) {
-                    sendResponse(res, StatusCode.NOT_FOUND_404, null, StatusError.ENDPOINT_ERROR );
+                    sendResponse(res, StatusCode.NOT_FOUND_404, null, StatusError.ENDPOINT_ERROR);
                 } else {
                     await postUser(req, res);
                 }
                 break;
+
+            case 'DELETE':
+                console.log(parseUserId)
+                if (parseUserId && req.url!.startsWith(`${BASE_ENDPOINT}\/`)) {
+                    sendResponse(res, StatusCode.NOT_FOUND_404, null, StatusError.ENDPOINT_ERROR);
+                } else {
+                    await deleteUser(req, res, parseUserId);
+                }
+                break;
+
 
         }
     } catch {
